@@ -53,6 +53,132 @@
       "reply_options": ["沒關係", "不要緊", "沒事"],
       "tw_note": "台湾でよく使う表現。軽い謝罪から深い謝罪まで幅広く使える",
       "created_at": 1704067200000
+    },
+    {
+      "id": "card-004",
+      "hanzi_trad": "我要這個",
+      "pinyin": "wǒ yào zhè ge",
+      "ja_meaning": "これをください",
+      "example_trad": "老闆，我要這個。",
+      "example_pinyin": "lǎo bǎn, wǒ yào zhè ge.",
+      "example_ja": "店長、これをください。",
+      "tags": [
+        {
+          "scene": "shopping",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["好的", "沒問題"],
+      "tw_note": "メニューを指差しながら注文するときに便利",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-005",
+      "hanzi_trad": "多少錢？",
+      "pinyin": "duō shǎo qián?",
+      "ja_meaning": "いくらですか？",
+      "example_trad": "請問，這個多少錢？",
+      "example_pinyin": "qǐng wèn, zhè ge duō shǎo qián?",
+      "example_ja": "すみません、これはいくらですか？",
+      "tags": [
+        {
+          "scene": "shopping",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["一百塊", "五十元"],
+      "tw_note": "値段を聞く基本フレーズ",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-006",
+      "hanzi_trad": "珍珠奶茶",
+      "pinyin": "zhēn zhū nǎi chá",
+      "ja_meaning": "タピオカミルクティー",
+      "example_trad": "我要一杯珍珠奶茶。",
+      "example_pinyin": "wǒ yào yì bēi zhēn zhū nǎi chá.",
+      "example_ja": "タピオカミルクティーを一杯ください。",
+      "tags": [
+        {
+          "scene": "ordering",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["甜度冰塊？", "好的"],
+      "tw_note": "台湾の代表的な飲み物。「珍奶（zhēn nǎi）」と略すこともある",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-007",
+      "hanzi_trad": "半糖去冰",
+      "pinyin": "bàn táng qù bīng",
+      "ja_meaning": "甘さ半分、氷なし",
+      "example_trad": "我要半糖去冰。",
+      "example_pinyin": "wǒ yào bàn táng qù bīng.",
+      "example_ja": "甘さ半分、氷なしでお願いします。",
+      "tags": [
+        {
+          "scene": "ordering",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["好的", "稍等"],
+      "tw_note": "ドリンクスタンドでの定番カスタマイズ",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-008",
+      "hanzi_trad": "外帶",
+      "pinyin": "wài dài",
+      "ja_meaning": "持ち帰り",
+      "example_trad": "我要外帶。",
+      "example_pinyin": "wǒ yào wài dài.",
+      "example_ja": "持ち帰りでお願いします。",
+      "tags": [
+        {
+          "scene": "restaurant",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["好的", "請稍等"],
+      "tw_note": "店内で食べる場合は「內用 (nèi yòng)」と言う",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-009",
+      "hanzi_trad": "洗手間",
+      "pinyin": "xǐ shǒu jiān",
+      "ja_meaning": "お手洗い",
+      "example_trad": "請問洗手間在哪裡？",
+      "example_pinyin": "qǐng wèn xǐ shǒu jiān zài nǎ lǐ?",
+      "example_ja": "すみません、お手洗いはどこですか？",
+      "tags": [
+        {
+          "scene": "travel",
+          "politeness": "polite"
+        }
+      ],
+      "reply_options": ["在那邊", "直走"],
+      "tw_note": "「廁所 (cè suǒ)」よりも丁寧な言い方",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-010",
+      "hanzi_trad": "沒關係",
+      "pinyin": "méi guān xi",
+      "ja_meaning": "大丈夫です、気にしないで",
+      "example_trad": "對不起！-- 沒關係。",
+      "example_pinyin": "duì bù qǐ! -- méi guān xi.",
+      "example_ja": "ごめんなさい！ -- 大丈夫ですよ。",
+      "tags": [
+        {
+          "scene": "apology",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["好的", "謝謝"],
+      "tw_note": "謝られた時の返答として最も一般的",
+      "created_at": 1704067200000
     }
   ],
   "templates": [
@@ -127,6 +253,107 @@
         }
       ],
       "created_at": 1704067200000
+    },
+    {
+      "id": "template-002",
+      "scene": "ドリンクスタンドでの注文",
+      "nodes": [
+        {
+          "id": "node-d01",
+          "speaker": "partner",
+          "text_trad": "你好，要喝什麼？",
+          "text_pinyin": "nǐ hǎo, yào hē shén me?",
+          "text_ja": "こんにちは、何にしますか？",
+          "prompt_text_trad": "要喝什麼？",
+          "prompt_pinyin": "yào hē shén me?",
+          "prompt_ja": "注文を聞かれています",
+          "followup_suggestions": ["推薦什麼？"]
+        },
+        {
+          "id": "node-d02",
+          "speaker": "user",
+          "text_trad": "我要一杯珍珠奶茶。",
+          "text_pinyin": "wǒ yào yì bēi zhēn zhū nǎi chá.",
+          "text_ja": "タピオカミルクティーを1杯ください。",
+          "prompt_text_trad": "我要一杯珍珠奶茶。",
+          "prompt_pinyin": "wǒ yào yì bēi zhēn zhū nǎi chá.",
+          "prompt_ja": "タピオカミルクティーを注文します"
+        },
+        {
+          "id": "node-d03",
+          "speaker": "partner",
+          "text_trad": "甜度冰塊？",
+          "text_pinyin": "tián dù bīng kuài?",
+          "text_ja": "甘さと氷は？",
+          "prompt_text_trad": "甜度冰塊？",
+          "prompt_pinyin": "tián dù bīng kuài?",
+          "prompt_ja": "甘さと氷の量を聞かれています"
+        },
+        {
+          "id": "node-d04",
+          "speaker": "user",
+          "text_trad": "半糖去冰。",
+          "text_pinyin": "bàn táng qù bīng.",
+          "text_ja": "甘さ半分、氷なしで。",
+          "prompt_text_trad": "半糖去冰。",
+          "prompt_pinyin": "bàn táng qù bīng.",
+          "prompt_ja": "好みを伝えます"
+        },
+        {
+          "id": "node-d05",
+          "speaker": "partner",
+          "text_trad": "好的，一共五十元。",
+          "text_pinyin": "hǎo de, yí gòng wǔ shí yuán.",
+          "text_ja": "はい、合計50元です。",
+          "prompt_text_trad": "一共五十元。",
+          "prompt_pinyin": "yí gòng wǔ shí yuán.",
+          "prompt_ja": "会計をします"
+        }
+      ],
+      "branches": [
+        {
+          "from_node_id": "node-d01",
+          "to_node_id": "node-d02",
+          "user_response": "珍珠奶茶"
+        },
+        {
+          "from_node_id": "node-d02",
+          "to_node_id": "node-d03"
+        },
+        {
+          "from_node_id": "node-d03",
+          "to_node_id": "node-d04",
+          "user_response": "半糖去冰"
+        },
+        {
+          "from_node_id": "node-d04",
+          "to_node_id": "node-d05"
+        }
+      ],
+      "followup_suggestions": ["要袋子嗎？", "刷卡可以嗎？"],
+      "key_phrases": [
+        {
+          "hanzi_trad": "甜度冰塊？",
+          "pinyin": "tián dù bīng kuài?",
+          "ja_meaning": "甘さと氷はどうしますか？",
+          "example_trad": "請問甜度冰塊？",
+          "example_pinyin": "qǐng wèn tián dù bīng kuài?",
+          "example_ja": "甘さと氷はいかがなさいますか？",
+          "reply_options": ["半糖少冰", "微糖去冰"],
+          "tw_note": "ドリンクスタンドで必ず聞かれるフレーズ"
+        },
+        {
+          "hanzi_trad": "半糖去冰",
+          "pinyin": "bàn táng qù bīng",
+          "ja_meaning": "甘さ半分、氷なし",
+          "example_trad": "我要半糖去冰。",
+          "example_pinyin": "wǒ yào bàn táng qù bīng.",
+          "example_ja": "甘さ半分、氷なしでお願いします。",
+          "reply_options": ["好的"],
+          "tw_note": "自分好みにカスタマイズするのが台湾流"
+        }
+      ],
+      "created_at": 1704067200000
     }
   ],
   "question_bank": [
@@ -144,6 +371,22 @@
       "text_to_read": "謝謝",
       "options": ["こんにちは", "ありがとう", "すみません"],
       "correct_answer": "ありがとう",
+      "difficulty": 1
+    },
+    {
+      "id": "q-listening-3",
+      "type": "listening",
+      "text_to_read": "多少錢？",
+      "options": ["これは何ですか？", "いくらですか？", "どこですか？"],
+      "correct_answer": "いくらですか？",
+      "difficulty": 1
+    },
+    {
+      "id": "q-listening-4",
+      "type": "listening",
+      "text_to_read": "珍珠奶茶",
+      "options": ["コーヒー", "ウーロン茶", "タピオカミルクティー"],
+      "correct_answer": "タピオカミルクティー",
       "difficulty": 1
     },
     {
@@ -165,6 +408,15 @@
       "difficulty": 1
     },
     {
+      "id": "q-reading-3",
+      "type": "reading",
+      "text": "我要這個。",
+      "question": "この文の意味は？",
+      "options": ["これをください。", "これは何ですか。", "これは嫌です。"],
+      "correct_answer": "これをください。",
+      "difficulty": 1
+    },
+    {
       "id": "q-speaking-1",
       "type": "speaking",
       "text_to_read": "你好",
@@ -177,6 +429,13 @@
       "text_to_read": "謝謝",
       "correct_answer": "",
       "difficulty": 1
+    },
+    {
+      "id": "q-speaking-3",
+      "type": "speaking",
+      "text_to_read": "半糖去冰",
+      "correct_answer": "",
+      "difficulty": 2
     },
     {
       "id": "q-vocab-1",
@@ -193,7 +452,22 @@
       "options": ["嬉しい", "悲しい", "怒っている"],
       "correct_answer": "嬉しい",
       "difficulty": 1
+    },
+    {
+      "id": "q-vocab-3",
+      "type": "vocab",
+      "word": "外帶",
+      "options": ["店内", "持ち帰り", "予約"],
+      "correct_answer": "持ち帰り",
+      "difficulty": 1
+    },
+    {
+      "id": "q-vocab-4",
+      "type": "vocab",
+      "word": "洗手間",
+      "options": ["レストラン", "お手洗い", "入り口"],
+      "correct_answer": "お手洗い",
+      "difficulty": 1
     }
   ]
 }
-

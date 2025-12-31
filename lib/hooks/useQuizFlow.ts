@@ -15,11 +15,11 @@ export function useQuizFlow() {
 
   const currentQuestion = cards[currentIndex];
 
-  // Load random cards from database
+  // Load cards from database
   useEffect(() => {
     db.cards.toArray().then(allCards => {
-      // Shuffle and take 10 random cards
-      const shuffled = [...allCards].sort(() => Math.random() - 0.5).slice(0, 10);
+      // Use all available cards
+      const shuffled = [...allCards].sort(() => Math.random() - 0.5);
       setCards(shuffled);
     });
   }, []);

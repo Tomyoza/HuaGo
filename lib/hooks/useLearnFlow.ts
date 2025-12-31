@@ -23,9 +23,8 @@ export function useLearnFlow() {
   const selectScene = useCallback((sceneId: number) => {
     setCurrentSceneId(sceneId);
     // Fetch cards for this scene from the database
-    // For now, we'll just get the first few cards
     db.cards.toArray().then(allCards => {
-      setCards(allCards.slice(0, 5)); // Get first 5 cards as demo
+      setCards(allCards); // Get all available cards
       setCurrentCardIndex(0);
       setStep('showJapanese');
     });
@@ -35,24 +34,25 @@ export function useLearnFlow() {
     setStep('showAnswer');
   }, []);
 
-  const grade = useCallback((grade: string) => {
+  const grade = useCallback((gradeValue: string) => {
     setStep('grade');
     // In a real implementation, this would update the SRS schedule
     // For now, just move to the next card
     setTimeout(() => {
-      nextCard();
+      setCurrentCardIndex(prevIndex => {
+        const nextIndex = prevIndex + 1;
+        if (nextIndex < cards.length) {
+          setStep('showJapanese');
+          return nextIndex;
+        } else {
+          setIsLimitReached(true);
+          setStep('complete');
+          return prevIndex;
+        }
+      });
     }, 500);
-  }, []);
+  }, [cards.length]);
 
-  const nextCard = useCallback(() => {
-    if (currentCardIndex + 1 < cards.length) {
-      setCurrentCardIndex(currentCardIndex + 1);
-      setStep('showJapanese');
-    } else {
-      setIsLimitReached(true);
-      setStep('complete');
-    }
-  }, [currentCardIndex, cards.length]);
 
   // Timer for showJapanese step
   useEffect(() => {
@@ -84,6 +84,5 @@ export function useLearnFlow() {
     selectScene,
     showAnswer,
     grade,
-    nextCard,
   };
 }

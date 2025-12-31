@@ -10,6 +10,14 @@ interface FlashCardProps {
 }
 
 export default function FlashCard({ card, side, onFlip }: FlashCardProps) {
+  if (!card) {
+    return (
+      <div className="relative w-full max-w-sm mx-auto perspective-1000 flex items-center justify-center" style={{ minHeight: '400px' }}>
+        <p className="text-gray-500">カードを読み込み中...</p>
+      </div>
+    );
+  }
+
   return (
     <div 
       className="relative w-full max-w-sm mx-auto perspective-1000" 

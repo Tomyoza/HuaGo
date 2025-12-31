@@ -11,8 +11,7 @@ import { useFocusQueue } from '@/lib/hooks/useFocusQueue';
 
 export default function FocusPage() {
   const [mode, setMode] = useState('all');
-  const [limit] = useState(10); // 固定で10枚
-  const { card, flipped, remaining, flip, grade } = useFocusQueue(mode, limit);
+  const { card, flipped, remaining, isComplete, flip, grade, resetReview } = useFocusQueue(mode);
 
   const filters = [
     { label: 'すべて', active: mode === 'all', onClick: () => setMode('all') },
@@ -31,12 +30,38 @@ export default function FocusPage() {
         {/* 上限表示 */}
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
           <p className="text-sm text-yellow-800">
-            今日はここまで（{limit}枚）
+            進捗: {remaining > 0 ? remaining + '枚残り' : 'すべて完了'}
           </p>
         </div>
 
         {/* 進捗 */}
         <div className="flex justify-center">
+          <ProgressPills remaining={remaining} />
+        </div>
+
+        {/* フラッシュカード */}
+        {isComplete ? (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-8 text-center">
+            <h2 className="text-2xl font-bold text-green-900 mb-4">完了しました！🎉</h2>
+            <p className="text-green-700 mb-6">Focus Reviewを終了しました。</p>
+            <button
+              onClick={() => window.location.href = '/'}
+              className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
+            >
+              トップに戻る
+            </button>
+          </div>
+        ) : card ? (
+          <>
+            <div onClick={flip}>
+              <FlashCard card={card} side={flipped ? 'back' : 'front'} onFlip={flip} />
+            </div>
+            <GradeButtons onGrade={grade} />
+          </>
+        ) : (
+          <div className="bg-white rounded-lg shadow p-6 text-center">
+            <p className="text-gray-500">カードを読み込み中...</p>
+          </div>
         )}
       </div>
     </main>
