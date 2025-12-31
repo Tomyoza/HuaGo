@@ -1,33 +1,85 @@
-// 仮hook: Learnのフロー
 import { useState, useCallback, useEffect } from 'react';
 import type { Card } from '@/lib/types';
-import { db } from '@/lib/db';
+import { 
+  getUnlearnedCards, 
+  getAvailableScenes, 
+  getNewCardLimit, 
+  getTodayNewCount 
+} from '@/lib/learn';
 
 export function useLearnFlow() {
-  const [scenes] = useState([
-    { id: 1, title: '挨拶', description: '基本的な挨拶表現' },
-    { id: 2, title: '買い物', description: 'スーパーでの会話' },
-  ]);
-
-  const [currentSceneId, setCurrentSceneId] = useState<number | null>(null);
+  // Use a flexible type for scenes to match what the UI expects
+  const [scenes, setScenes] = useState<{ id: string; title: string; description?: string }[]>([]);
+  
+  const [currentSceneId, setCurrentSceneId] = useState<string | null>(null);
   const [cards, setCards] = useState<Card[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [step, setStep] = useState<'select' | 'showJapanese' | 'showAnswer' | 'grade' | 'complete'>('select');
   const [timeLeft, setTimeLeft] = useState(3);
-  const [newCardsTodayCount, setNewCardsTodayCount] = useState(0);
   const [isLimitReached, setIsLimitReached] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const currentScene = currentSceneId ? scenes.find(s => s.id === currentSceneId) : scenes[0];
+  // Initialize scenes on mount
+  useEffect(() => {
+    async function loadScenes() {
+      try {
+        const availableScenes = await getAvailableScenes();
+        // Map simple tag strings to objects for the UI
+        const formattedScenes = availableScenes.map(scene => ({
+          id: scene,
+          title: scene.charAt(0).toUpperCase() + scene.slice(1), // Capitalize
+          description: `${scene} related vocabulary`
+        }));
+        setScenes(formattedScenes);
+      } catch (error) {
+        console.error('Failed to load scenes:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadScenes();
+  }, []);
+
+  const currentScene = currentSceneId ? scenes.find(s => s.id === currentSceneId) : null;
   const currentCard = cards[currentCardIndex];
 
-  const selectScene = useCallback((sceneId: number) => {
+  const selectScene = useCallback(async (sceneId: string) => {
+    setIsLoading(true);
     setCurrentSceneId(sceneId);
-    // Fetch cards for this scene from the database
-    db.cards.toArray().then(allCards => {
-      setCards(allCards); // Get all available cards
-      setCurrentCardIndex(0);
-      setStep('showJapanese');
-    });
+
+    try {
+      // 1. Check daily limits
+      const limit = await getNewCardLimit();
+      const todayCount = await getTodayNewCount();
+      const remainingQuota = Math.max(0, limit - todayCount);
+
+      if (remainingQuota === 0) {
+        setIsLimitReached(true);
+        setStep('complete');
+        setIsLoading(false);
+        return;
+      }
+
+      // 2. Fetch unlearned cards specifically for this scene
+      const candidates = await getUnlearnedCards({ scene: sceneId });
+      
+      // 3. Slice to fit the daily quota
+      const cardsToLearn = candidates.slice(0, remainingQuota);
+
+      if (cardsToLearn.length === 0) {
+        // No new cards available for this scene
+        setCards([]);
+        setStep('complete'); 
+      } else {
+        setCards(cardsToLearn);
+        setCurrentCardIndex(0);
+        setStep('showJapanese');
+      }
+    } catch (error) {
+      console.error("Error selecting scene:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   const showAnswer = useCallback(() => {
@@ -35,9 +87,10 @@ export function useLearnFlow() {
   }, []);
 
   const grade = useCallback((gradeValue: string) => {
+    // In a real app, save the result to DB here using `lib/srs.ts`
+    // await recordReview(currentCard.id, gradeValue);
+
     setStep('grade');
-    // In a real implementation, this would update the SRS schedule
-    // For now, just move to the next card
     setTimeout(() => {
       setCurrentCardIndex(prevIndex => {
         const nextIndex = prevIndex + 1;
@@ -45,21 +98,19 @@ export function useLearnFlow() {
           setStep('showJapanese');
           return nextIndex;
         } else {
-          setIsLimitReached(true);
           setStep('complete');
           return prevIndex;
         }
       });
-    }, 500);
+    }, 200);
   }, [cards.length]);
-
 
   // Timer for showJapanese step
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (step === 'showJapanese' && timeLeft > 0) {
       timer = setTimeout(() => {
-        setTimeLeft(timeLeft - 1);
+        setTimeLeft(prev => prev - 1);
       }, 1000);
     } else if (step === 'showJapanese' && timeLeft === 0) {
       showAnswer();
@@ -81,6 +132,7 @@ export function useLearnFlow() {
     step,
     timeLeft,
     isLimitReached,
+    isLoading,
     selectScene,
     showAnswer,
     grade,
