@@ -94,9 +94,12 @@ export interface Assessment {
 
 export interface AssessmentQuestion {
   id: string;
-  type: 'multiple_choice' | 'fill_blank' | 'translation';
-  question: string;
-  options?: string[];
+  type: 'multiple_choice' | 'fill_blank' | 'translation' | 'listening' | 'reading' | 'speaking' | 'vocab';
+  question?: string; // 質問文（reading用）
+  text?: string; // テキスト（reading/speaking用）
+  text_to_read?: string; // 読み上げテキスト（listening/speaking用）
+  word?: string; // 単語（vocab用）
+  options?: string[]; // 選択肢
   correct_answer: string;
   difficulty: number;
 }

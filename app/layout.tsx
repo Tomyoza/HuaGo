@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import SeedInitializer from '@/components/SeedInitializer';
-import Navigation from '@/components/Navigation';
+import BottomNav from '@/components/BottomNav';
 
 export const metadata: Metadata = {
   title: 'HuaGo - 台湾華語学習アプリ',
@@ -15,10 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja">
-      <body>
+      <body className="bg-gray-50">
         <SeedInitializer />
-        <Navigation />
-        {children}
+        <main className="pb-20">
+          {children}
+        </main>
+        <BottomNav />
       </body>
     </html>
   );

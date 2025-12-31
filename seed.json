@@ -128,6 +128,72 @@
       ],
       "created_at": 1704067200000
     }
+  ],
+  "question_bank": [
+    {
+      "id": "q-listening-1",
+      "type": "listening",
+      "text_to_read": "你好",
+      "options": ["こんにちは", "ありがとう", "すみません"],
+      "correct_answer": "こんにちは",
+      "difficulty": 1
+    },
+    {
+      "id": "q-listening-2",
+      "type": "listening",
+      "text_to_read": "謝謝",
+      "options": ["こんにちは", "ありがとう", "すみません"],
+      "correct_answer": "ありがとう",
+      "difficulty": 1
+    },
+    {
+      "id": "q-reading-1",
+      "type": "reading",
+      "text": "你好，很高興認識你。",
+      "question": "この文の意味は？",
+      "options": ["こんにちは、お会いできて嬉しいです。", "ありがとう、手伝ってくれて。", "すみません、遅れました。"],
+      "correct_answer": "こんにちは、お会いできて嬉しいです。",
+      "difficulty": 1
+    },
+    {
+      "id": "q-reading-2",
+      "type": "reading",
+      "text": "謝謝你的幫忙。",
+      "question": "この文の意味は？",
+      "options": ["こんにちは、お会いできて嬉しいです。", "ありがとう、手伝ってくれて。", "すみません、遅れました。"],
+      "correct_answer": "ありがとう、手伝ってくれて。",
+      "difficulty": 1
+    },
+    {
+      "id": "q-speaking-1",
+      "type": "speaking",
+      "text_to_read": "你好",
+      "correct_answer": "",
+      "difficulty": 1
+    },
+    {
+      "id": "q-speaking-2",
+      "type": "speaking",
+      "text_to_read": "謝謝",
+      "correct_answer": "",
+      "difficulty": 1
+    },
+    {
+      "id": "q-vocab-1",
+      "type": "vocab",
+      "word": "不好意思",
+      "options": ["こんにちは", "ありがとう", "すみません"],
+      "correct_answer": "すみません",
+      "difficulty": 1
+    },
+    {
+      "id": "q-vocab-2",
+      "type": "vocab",
+      "word": "很高興",
+      "options": ["嬉しい", "悲しい", "怒っている"],
+      "correct_answer": "嬉しい",
+      "difficulty": 1
+    }
   ]
 }
 

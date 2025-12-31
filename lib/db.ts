@@ -27,6 +27,16 @@ export class HuaGoDB extends Dexie {
       dailyStats: 'date',
       settings: 'key',
     });
+
+    // version 2: cardsにhanzi_trad, confusion_group_idインデックス追加
+    this.version(2).stores({
+      cards: 'id, hanzi_trad, confusion_group_id, created_at',
+    });
+
+    // version 3: userCardStatesにcreated_atインデックス追加
+    this.version(3).stores({
+      userCardStates: 'card_id, due_at, focus_until, created_at',
+    });
   }
 }
 
