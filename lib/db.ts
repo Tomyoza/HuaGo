@@ -37,6 +37,11 @@ export class HuaGoDB extends Dexie {
     this.version(3).stores({
       userCardStates: 'card_id, due_at, focus_until, created_at',
     });
+
+    // version 4: userCardStatesに分析用インデックス(last_grade, lapse_count, last_reviewed_at)を追加
+    this.version(4).stores({
+      userCardStates: 'card_id, due_at, focus_until, created_at, last_grade, lapse_count, last_reviewed_at',
+    });
   }
 }
 

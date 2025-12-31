@@ -118,3 +118,8 @@ export interface AppSettings {
   value: string;
 }
 
+export interface CardWithState {
+  card: Card;
+  state: UserCardState | null;
+}
+
