@@ -1,6 +1,5 @@
-// Reviewキュー
 import { useState, useEffect } from 'react';
-import type { Card, UserCardState } from '@/lib/types';
+import type { Card } from '@/lib/types';
 import { db } from '@/lib/db';
 
 export function useReviewQueue(filter: string) {
@@ -8,26 +7,29 @@ export function useReviewQueue(filter: string) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [remaining, setRemaining] = useState(0);
+  const [total, setTotal] = useState(0);
 
-  const currentCard = cards[currentIndex];
+  const currentCard = currentIndex < cards.length ? cards[currentIndex] : undefined;
 
-  // Load due cards from database
   useEffect(() => {
+    // In a real app, you would filter by 'due' date here.
+    // For now, we fetch all cards to simulate a review queue.
     db.cards.toArray().then(allCards => {
       setCards(allCards);
       setRemaining(allCards.length);
+      setTotal(allCards.length);
     });
   }, []);
 
   const flip = () => setFlipped(!flipped);
 
   const grade = (g: 'EASY' | 'HARD' | 'AGAIN') => {
-    // Update card state in database
-    if (currentCard) {
+    // Here you would normally save the review result to the DB
+    // e.g. await recordReview(currentCard.id, g);
+
+    if (currentIndex < cards.length) {
       const newIndex = currentIndex + 1;
-      if (newIndex < cards.length) {
-        setCurrentIndex(newIndex);
-      }
+      setCurrentIndex(newIndex);
       setRemaining(prev => Math.max(0, prev - 1));
       setFlipped(false);
     }
@@ -37,6 +39,7 @@ export function useReviewQueue(filter: string) {
     card: currentCard,
     flipped,
     remaining,
+    total,
     flip,
     grade,
   };
