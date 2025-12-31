@@ -1,0 +1,133 @@
+{
+  "cards": [
+    {
+      "id": "card-001",
+      "hanzi_trad": "你好",
+      "pinyin": "nǐ hǎo",
+      "ja_meaning": "こんにちは",
+      "example_trad": "你好，很高興認識你。",
+      "example_pinyin": "nǐ hǎo, hěn gāo xìng rèn shí nǐ.",
+      "example_ja": "こんにちは、お会いできて嬉しいです。",
+      "tags": [
+        {
+          "scene": "greeting",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["你好", "你好嗎？", "很高興認識你"],
+      "tw_note": "台湾では「你好」はややフォーマル。親しい間柄では「嗨」も使う",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-002",
+      "hanzi_trad": "謝謝",
+      "pinyin": "xiè xie",
+      "ja_meaning": "ありがとう",
+      "example_trad": "謝謝你的幫忙。",
+      "example_pinyin": "xiè xie nǐ de bāng máng.",
+      "example_ja": "手伝ってくれてありがとう。",
+      "tags": [
+        {
+          "scene": "gratitude",
+          "politeness": "neutral"
+        }
+      ],
+      "reply_options": ["不客氣", "不用謝", "沒問題"],
+      "tw_note": "台湾では「謝謝」が一般的。丁寧な場合は「非常謝謝」",
+      "created_at": 1704067200000
+    },
+    {
+      "id": "card-003",
+      "hanzi_trad": "不好意思",
+      "pinyin": "bù hǎo yì si",
+      "ja_meaning": "すみません、申し訳ありません",
+      "example_trad": "不好意思，我遲到了。",
+      "example_pinyin": "bù hǎo yì si, wǒ chí dào le.",
+      "example_ja": "すみません、遅れました。",
+      "tags": [
+        {
+          "scene": "apology",
+          "politeness": "polite"
+        }
+      ],
+      "reply_options": ["沒關係", "不要緊", "沒事"],
+      "tw_note": "台湾でよく使う表現。軽い謝罪から深い謝罪まで幅広く使える",
+      "created_at": 1704067200000
+    }
+  ],
+  "templates": [
+    {
+      "id": "template-001",
+      "scene": "レストランでの注文",
+      "nodes": [
+        {
+          "id": "node-001",
+          "speaker": "partner",
+          "text_trad": "歡迎光臨，幾位？",
+          "text_pinyin": "huān yíng guāng lín, jǐ wèi?",
+          "text_ja": "いらっしゃいませ、何名様ですか？",
+          "prompt_text_trad": "歡迎光臨，幾位？",
+          "prompt_pinyin": "huān yíng guāng lín, jǐ wèi?",
+          "prompt_ja": "店員が人数を聞いています",
+          "followup_suggestions": ["有訂位嗎？", "請這邊坐"]
+        },
+        {
+          "id": "node-002",
+          "speaker": "user",
+          "text_trad": "兩位。",
+          "text_pinyin": "liǎng wèi.",
+          "text_ja": "2名です。",
+          "prompt_text_trad": "兩位。",
+          "prompt_pinyin": "liǎng wèi.",
+          "prompt_ja": "2名と答えます"
+        },
+        {
+          "id": "node-003",
+          "speaker": "partner",
+          "text_trad": "好的，請這邊坐。",
+          "text_pinyin": "hǎo de, qǐng zhè biān zuò.",
+          "text_ja": "承知いたしました、こちらへどうぞ。",
+          "prompt_text_trad": "好的，請這邊坐。",
+          "prompt_pinyin": "hǎo de, qǐng zhè biān zuò.",
+          "prompt_ja": "店員が席に案内します"
+        }
+      ],
+      "branches": [
+        {
+          "from_node_id": "node-001",
+          "to_node_id": "node-002",
+          "user_response": "兩位"
+        },
+        {
+          "from_node_id": "node-002",
+          "to_node_id": "node-003"
+        }
+      ],
+      "followup_suggestions": ["有訂位嗎？", "請這邊坐"],
+      "key_phrases": [
+        {
+          "hanzi_trad": "歡迎光臨，幾位？",
+          "pinyin": "huān yíng guāng lín, jǐ wèi?",
+          "ja_meaning": "いらっしゃいませ、何名様ですか？",
+          "example_trad": "歡迎光臨，幾位？",
+          "example_pinyin": "huān yíng guāng lín, jǐ wèi?",
+          "example_ja": "いらっしゃいませ、何名様ですか？",
+          "reply_options": ["兩位", "三位", "一位"],
+          "tw_note": "台湾のレストランでよく使う表現"
+        },
+        {
+          "hanzi_trad": "兩位",
+          "pinyin": "liǎng wèi",
+          "ja_meaning": "2名",
+          "example_trad": "我們兩位。",
+          "example_pinyin": "wǒ men liǎng wèi.",
+          "example_ja": "私たち2名です。",
+          "reply_options": ["好的", "請這邊坐"],
+          "tw_note": "「位」は丁寧な数え方"
+        }
+      ],
+      "created_at": 1704067200000
+    }
+  ]
+}
+
