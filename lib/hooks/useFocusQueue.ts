@@ -1,34 +1,38 @@
-// 仮hook: Focusキュー
-import { useState } from 'react';
-
-const dummyCard = {
-  id: 'dummy-focus-1',
-  hanzi_trad: '謝謝',
-  pinyin: 'xiè xie',
-  ja_meaning: 'ありがとう',
-  example_trad: '謝謝你的幫忙。',
-  example_pinyin: 'xiè xie nǐ de bāng máng.',
-  example_ja: '手伝ってくれてありがとう。',
-  tags: [{ scene: 'gratitude' }],
-  reply_options: ['不客氣', '不用謝'],
-  tw_note: '台湾では「謝謝」が一般的',
-  created_at: Date.now(),
-};
+// Focusキュー
+import { useState, useEffect } from 'react';
+import type { Card } from '@/lib/types';
+import { db } from '@/lib/db';
 
 export function useFocusQueue(mode: string, limit: number) {
+  const [cards, setCards] = useState<Card[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [remaining, setRemaining] = useState(limit);
+
+  const currentCard = cards[currentIndex];
+
+  // Load cards from database and shuffle
+  useEffect(() => {
+    db.cards.toArray().then(allCards => {
+      const shuffled = [...allCards].sort(() => Math.random() - 0.5).slice(0, limit);
+      setCards(shuffled);
+      setRemaining(shuffled.length);
+    });
+  }, [limit]);
 
   const flip = () => setFlipped(!flipped);
 
   const grade = (g: 'EASY' | 'HARD' | 'AGAIN') => {
-    console.log('Graded:', g);
+    const newIndex = currentIndex + 1;
+    if (newIndex < cards.length) {
+      setCurrentIndex(newIndex);
+    }
     setRemaining(prev => Math.max(0, prev - 1));
     setFlipped(false);
   };
 
   return {
-    card: dummyCard,
+    card: currentCard,
     flipped,
     remaining,
     flip,

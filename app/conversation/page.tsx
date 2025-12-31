@@ -23,8 +23,8 @@ export default function ConversationPage() {
             {scenes.map((scene) => (
               <PrimaryActionCard
                 key={scene.id}
-                title={scene.title}
-                description={scene.description}
+                title={scene.title || scene.scene}
+                description={scene.description || scene.scene}
                 onClick={() => {
                   setSelectedSceneId(scene.id);
                   selectScene(scene.id);
@@ -59,40 +59,43 @@ export default function ConversationPage() {
 
       <div className="p-4 space-y-6">
         {/* ノード表示 */}
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-4xl font-bold mb-4">{currentNode.traditional}</p>
-          <p className="text-lg text-gray-600 mb-4">{currentNode.japanese}</p>
-          <SpeakButton text={currentNode.traditional} />
-        </div>
+        {currentNode && (
+          <>
+            <div className="bg-white rounded-lg shadow p-6 text-center">
+              <p className="text-4xl font-bold mb-4">{currentNode.text_trad}</p>
+              <p className="text-lg text-gray-600 mb-4">{currentNode.text_ja}</p>
+              <SpeakButton text={currentNode.text_trad} />
+            </div>
 
-        {/* 返答候補ボタン */}
-        <div className="space-y-4">
-          {currentNode.responses.map((response, index) => (
-            <button
-              key={index}
-              onClick={() => selectResponse(index)}
-              className="w-full p-4 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600"
-            >
-              {response.text}
-            </button>
-          ))}
-        </div>
-
-        {/* followup_suggestions */}
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h3 className="text-sm font-semibold mb-2">追加の一言</h3>
-          <div className="flex flex-wrap gap-2">
-            {currentNode.followup.map((followup, index) => (
+            {/* 返答候補ボタン */}
+            <div className="space-y-4">
               <button
-                key={index}
-                onClick={() => navigator.clipboard.writeText(followup)}
-                className="px-3 py-1 bg-white rounded text-sm hover:bg-gray-100"
+                onClick={() => selectResponse()}
+                className="w-full p-4 bg-blue-500 text-white rounded-lg text-lg font-semibold hover:bg-blue-600"
               >
-                {followup}
+                答える
               </button>
-            ))}
-          </div>
-        </div>
+            </div>
+
+            {/* followup_suggestions */}
+            {currentNode.followup_suggestions && currentNode.followup_suggestions.length > 0 && (
+              <div className="bg-gray-50 rounded-lg p-4">
+                <h3 className="text-sm font-semibold mb-2">追加の一言</h3>
+                <div className="flex flex-wrap gap-2">
+                  {currentNode.followup_suggestions.map((followup, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigator.clipboard.writeText(followup)}
+                      className="px-3 py-1 bg-white rounded text-sm hover:bg-gray-100"
+                    >
+                      {followup}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </main>
   );

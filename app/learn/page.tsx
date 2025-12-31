@@ -58,12 +58,12 @@ export default function LearnPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <PageHeader title={`学習: ${currentScene.title}`} showBack backHref="/" />
+      <PageHeader title={`学習: ${currentScene?.title}`} showBack backHref="/" />
 
       <div className="p-4 space-y-6">
-        {step === 'showJapanese' && (
+        {step === 'showJapanese' && currentCard && (
           <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-2xl mb-4">{currentCard.japanese}</p>
+            <p className="text-2xl mb-4">{currentCard.ja_meaning}</p>
             <p className="text-sm text-gray-500">答えを表示まで: {timeLeft}秒</p>
             <button
               onClick={showAnswer}
@@ -74,20 +74,19 @@ export default function LearnPage() {
           </div>
         )}
 
-        {step === 'showAnswer' && (
+        {step === 'showAnswer' && currentCard && (
           <>
             <FlashCard
-              card={{
-                front: currentCard.japanese,
-                back: `${currentCard.traditional} (${currentCard.pinyin})`,
-              }}
+              card={currentCard}
               side="back"
               onFlip={() => {}}
             />
             <div className="flex justify-center">
-              <SpeakButton text={currentCard.traditional} />
+              <SpeakButton text={currentCard.hanzi_trad} />
             </div>
-            <GradeButtons onGrade={grade} />
+            <GradeButtons onGrade={(gradeValue) => {
+              grade(gradeValue);
+            }} />
           </>
         )}
       </div>
