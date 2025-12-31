@@ -10,74 +10,66 @@ interface FlashCardProps {
 }
 
 export default function FlashCard({ card, side, onFlip }: FlashCardProps) {
-  if (!card) {
-    return (
-      <div className="relative w-full max-w-sm mx-auto perspective-1000 flex items-center justify-center" style={{ minHeight: '400px' }}>
-        <p className="text-gray-500">カードを読み込み中...</p>
-      </div>
-    );
-  }
+  if (!card) return null;
 
   return (
     <div 
-      className="relative w-full max-w-sm mx-auto perspective-1000" 
-      style={{ minHeight: '400px' }}
+      className="relative w-full h-full bg-white rounded-3xl shadow-xl border border-gray-100 flex flex-col overflow-hidden mx-auto transition-all duration-300"
+      onClick={side === 'front' ? onFlip : undefined}
     >
-      <div 
-        className={`
-          relative w-full h-full bg-white rounded-2xl shadow-soft border border-gray-100 flex flex-col
-          transition-all duration-500 transform
-          ${side === 'back' ? 'ring-2 ring-brand-100' : ''}
-        `}
-      >
-        {/* Content Container */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+      {/* Content Container - Scrollable if content is too long */}
+      <div className="flex-1 overflow-y-auto no-scrollbar p-6 flex flex-col items-center justify-center text-center">
+        
+        {/* Main Character */}
+        <div className="flex-shrink-0 mb-6">
+          <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-3 tracking-tight">
+            {card.hanzi_trad}
+          </h2>
           
-          {/* Main Text */}
-          <div className="mb-6">
-            <h2 className="text-5xl font-black text-gray-900 mb-2 tracking-tight">
-              {card.hanzi_trad}
-            </h2>
-            {(side === 'back') && (
-               <div className="inline-flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-full">
-                  <span className="text-lg font-medium text-brand-600">{card.pinyin}</span>
-                  <SpeakButton text={card.hanzi_trad} className="text-brand-600 hover:bg-brand-100" />
-               </div>
-            )}
-            {(side === 'front') && (
-               <div className="mt-2 opacity-50">
-                  <SpeakButton text={card.hanzi_trad} />
-               </div>
-            )}
-          </div>
-
-          {/* Meaning (Back Only) */}
+          {/* Front: Audio Hint / Back: Full Details */}
           {side === 'back' && (
-            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-              <p className="text-2xl font-bold text-gray-700 mb-6 border-t border-gray-100 pt-6 w-full">
-                {card.ja_meaning}
-              </p>
-              
-              {/* Example Sentence */}
-              <div className="bg-surface-50 p-4 rounded-xl text-left w-full">
-                <p className="text-lg text-gray-800 mb-1">{card.example_trad}</p>
-                <p className="text-sm text-gray-500 mb-1">{card.example_pinyin}</p>
-                <p className="text-sm text-gray-600 italic">{card.example_ja}</p>
-              </div>
-            </div>
+             <div className="inline-flex items-center gap-2 bg-brand-50 px-4 py-1.5 rounded-full">
+                <span className="text-xl font-medium text-brand-700">{card.pinyin}</span>
+                <SpeakButton text={card.hanzi_trad} className="text-brand-600 hover:bg-brand-100 p-1" />
+             </div>
+          )}
+          {side === 'front' && (
+             <div className="mt-2 opacity-30 hover:opacity-100 transition-opacity">
+                <SpeakButton text={card.hanzi_trad} />
+             </div>
           )}
         </div>
 
-        {/* Action Area */}
-        {side === 'front' && onFlip && (
-          <div className="p-6 border-t border-gray-50">
-            <button
-              onClick={onFlip}
-              className="w-full py-4 bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold rounded-xl transition-colors"
-            >
-              Show Answer
-            </button>
+        {/* Meaning Section (Back Only) */}
+        {side === 'back' && (
+          <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="border-t border-gray-100 pt-6">
+               <p className="text-2xl font-bold text-gray-800 leading-snug">
+                 {card.ja_meaning}
+               </p>
+            </div>
+            
+            {/* Example Box */}
+            <div className="bg-gray-50 p-4 rounded-2xl text-left w-full space-y-2">
+              <p className="text-lg text-gray-900 leading-relaxed font-medium">{card.example_trad}</p>
+              <p className="text-sm text-gray-500 font-mono">{card.example_pinyin}</p>
+              <p className="text-sm text-gray-600 italic border-t border-gray-200 pt-2 mt-2">{card.example_ja}</p>
+            </div>
+            
+             {/* Tags */}
+             <div className="flex flex-wrap gap-2 justify-center pt-2">
+                {card.tags.map((tag, i) => (
+                  tag.scene && <span key={i} className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-md">#{tag.scene}</span>
+                ))}
+             </div>
           </div>
+        )}
+        
+        {/* Front: Tap hint */}
+        {side === 'front' && (
+           <p className="absolute bottom-6 text-sm text-gray-400 font-medium animate-pulse">
+             Tap card to flip
+           </p>
         )}
       </div>
     </div>

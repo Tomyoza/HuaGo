@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import FilterChips from '@/components/FilterChips';
 import FlashCard from '@/components/FlashCard';
 import GradeButtons from '@/components/GradeButtons';
 import ProgressPills from '@/components/ProgressPills';
+import SessionComplete from '@/components/SessionComplete';
 import { useReviewQueue } from '@/lib/hooks/useReviewQueue';
 
 export default function ReviewPage() {
@@ -19,59 +19,54 @@ export default function ReviewPage() {
     { label: 'Again', active: filter === 'again', onClick: () => setFilter('again') },
   ];
 
-  // If no card is available, show completion screen
+  // Completion State (Generic handling)
   if (!card) {
     return (
-      <main className="min-h-screen bg-gray-50 pb-20">
+      <main className="min-h-screen bg-gray-50 flex flex-col">
         <PageHeader title="Review" showBack backHref="/" />
-        <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 max-w-md mx-auto text-center">
-          <div className="text-6xl mb-4">✅</div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">All Caught Up!</h2>
-          <p className="text-gray-600 mb-8">
-            You have no more cards to review right now.
-          </p>
-          
-          <Link 
-            href="/" 
-            className="flex w-full items-center justify-center rounded-xl bg-brand-500 py-4 text-center font-bold text-white shadow-lg transition-all hover:bg-brand-600 active:scale-95"
-          >
-            Back to Home
-          </Link>
+        <div className="flex-1 flex flex-col">
+           <SessionComplete 
+             title="All Caught Up!" 
+             subtitle="You have no more cards due for review right now." 
+           />
         </div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 pb-20">
+    <main className="min-h-screen bg-gray-50 flex flex-col pb-24">
       <PageHeader title="Review" showBack backHref="/" />
 
-      <div className="p-4 max-w-md mx-auto space-y-6">
-        {/* Filters */}
-        <FilterChips filters={filters} />
-
-        {/* Progress */}
-        <div className="flex justify-center">
-          <ProgressPills current={remaining} total={total || 10} label="Remaining" />
+      <div className="flex-1 flex flex-col px-4 pt-4 pb-2 w-full max-w-md mx-auto h-full">
+        {/* Header Controls */}
+        <div className="flex justify-between items-center mb-6">
+          <FilterChips filters={filters} />
+          <ProgressPills current={remaining} total={total || 0} label="Due" />
         </div>
 
         {/* Card Area */}
-        <div className="min-h-[420px]">
+        <div className="flex-1 flex flex-col justify-center min-h-0 mb-6">
+           <div className="h-full max-h-[60vh] flex flex-col">
             <FlashCard 
               card={card} 
               side={flipped ? 'back' : 'front'} 
               onFlip={flip} 
             />
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="h-20">
+        {/* Footer Actions */}
+        <div className="mt-auto">
             {flipped ? (
-            <GradeButtons onGrade={grade} />
+              <GradeButtons onGrade={grade} />
             ) : (
-             <p className="text-center text-gray-400 text-sm mt-4">
-                Tap card to flip
-             </p>
+              <button
+                onClick={flip}
+                className="w-full h-14 bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/30 hover:bg-brand-700 active:scale-95 transition-all"
+              >
+                Show Answer
+              </button>
             )}
         </div>
       </div>

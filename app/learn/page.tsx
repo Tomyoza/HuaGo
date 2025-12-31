@@ -1,26 +1,25 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import PageHeader from '@/components/PageHeader';
 import PrimaryActionCard from '@/components/PrimaryActionCard';
 import FlashCard from '@/components/FlashCard';
 import GradeButtons from '@/components/GradeButtons';
+import SessionComplete from '@/components/SessionComplete';
 import { useLearnFlow } from '@/lib/hooks/useLearnFlow';
 
 export default function LearnPage() {
   const { scenes, currentScene, currentCard, step, timeLeft, isLimitReached, selectScene, showAnswer, grade } = useLearnFlow();
-
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null);
 
-  // 1. Scene Selection Screen
+  // 1. Scene Selection
   if (step === 'select' || !selectedSceneId) {
     return (
-      <main className="min-h-screen bg-gray-50 pb-20">
+      <main className="min-h-screen bg-gray-50 pb-24">
         <PageHeader title="New Learning" showBack backHref="/" />
         <div className="p-4 space-y-6 max-w-md mx-auto">
-          <h2 className="text-lg font-bold text-gray-700">Select a Topic</h2>
-          <div className="space-y-4">
+          <h2 className="text-lg font-bold text-gray-700 px-1">Select a Topic</h2>
+          <div className="space-y-3">
             {scenes.map((scene) => (
               <PrimaryActionCard
                 key={scene.id}
@@ -40,26 +39,18 @@ export default function LearnPage() {
     );
   }
 
-  // 2. Completion Screen
+  // 2. Completion
   if (step === 'complete' || isLimitReached) {
     return (
-      <main className="min-h-screen bg-gray-50 pb-20">
+      <main className="min-h-screen bg-gray-50 flex flex-col">
         <PageHeader title="Learning Session" showBack backHref="/" />
-        <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 max-w-md mx-auto text-center">
-          <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-2xl font-black text-gray-900 mb-2">Great Job!</h2>
-          <p className="text-gray-600 mb-8">
-            {isLimitReached 
-              ? "You've reached your daily limit for new cards." 
+        <div className="flex-1 flex flex-col">
+          <SessionComplete 
+            title={isLimitReached ? "Daily Limit Reached" : "Topic Completed!"}
+            subtitle={isLimitReached 
+              ? "You've learned your daily quota of new words. Come back tomorrow!" 
               : "You've finished the new cards for this topic!"}
-          </p>
-          
-          <Link 
-            href="/" 
-            className="flex w-full items-center justify-center rounded-xl bg-brand-500 py-4 text-center font-bold text-white shadow-lg transition-all hover:bg-brand-600 active:scale-95"
-          >
-            Back to Home
-          </Link>
+          />
         </div>
       </main>
     );
@@ -67,51 +58,64 @@ export default function LearnPage() {
 
   // 3. Learning Interface
   return (
-    <main className="min-h-screen bg-gray-50 pb-20">
+    <main className="min-h-screen bg-gray-50 flex flex-col pb-24">
       <PageHeader title={currentScene?.title || 'Learning'} showBack backHref="/" />
 
-      <div className="p-4 max-w-md mx-auto space-y-6">
-        {step === 'showJapanese' && currentCard && (
-          <div className="flex flex-col items-center justify-center min-h-[400px] bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gray-100">
-               <div 
-                 className="h-full bg-brand-400 transition-all duration-1000 ease-linear" 
-                 style={{ width: `${(timeLeft / 3) * 100}%` }} 
-               />
-            </div>
-            
-            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-6">Meaning</span>
-            <p className="text-3xl font-bold text-gray-900 mb-8 leading-relaxed">
-              {currentCard.ja_meaning}
-            </p>
-            
-            {timeLeft > 0 ? (
-              <p className="text-sm font-medium text-brand-500 animate-pulse">
-                Thinking... ({timeLeft})
-              </p>
-            ) : (
-              <button
-                onClick={showAnswer}
-                className="mt-4 px-8 py-3 bg-brand-500 text-white font-bold rounded-full shadow-lg shadow-brand-500/20 hover:bg-brand-600 transition-all"
-              >
-                Show Answer
-              </button>
-            )}
-          </div>
-        )}
+      <div className="flex-1 flex flex-col px-4 pt-4 pb-2 w-full max-w-md mx-auto">
+        
+        {/* Card Area */}
+        <div className="flex-1 flex flex-col justify-center mb-6">
+          {step === 'showJapanese' && currentCard && (
+            <div className="relative w-full aspect-[3/4] max-h-[60vh] bg-white rounded-3xl shadow-xl border border-gray-100 flex flex-col items-center justify-center p-8 text-center overflow-hidden mx-auto">
+              {/* Progress Bar */}
+              <div className="absolute top-0 left-0 w-full h-1.5 bg-gray-100">
+                <div 
+                  className="h-full bg-brand-500 transition-all duration-1000 ease-linear" 
+                  style={{ width: `${(timeLeft / 3) * 100}%` }} 
+                />
+              </div>
+              
+              <div className="flex-1 flex flex-col items-center justify-center">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Meaning</span>
+                <p className="text-3xl md:text-4xl font-bold text-gray-900 leading-relaxed break-words w-full">
+                  {currentCard.ja_meaning}
+                </p>
+              </div>
 
-        {step === 'showAnswer' && currentCard && (
-          <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
-            <FlashCard
-              card={currentCard}
-              side="back"
-              onFlip={() => {}}
-            />
-            <div className="mt-6">
-              <GradeButtons onGrade={grade} />
+              <div className="h-16 flex items-center justify-center w-full">
+                 {timeLeft > 0 ? (
+                  <p className="text-sm font-medium text-brand-500 animate-pulse flex items-center gap-2">
+                    Thinking... <span className="text-lg font-bold">{timeLeft}</span>
+                  </p>
+                ) : (
+                  <button
+                    onClick={showAnswer}
+                    className="w-full py-4 bg-brand-600 text-white font-bold rounded-xl shadow-lg shadow-brand-500/30 hover:bg-brand-700 active:scale-95 transition-all animate-in fade-in slide-in-from-bottom-2"
+                  >
+                    Show Answer
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {step === 'showAnswer' && currentCard && (
+            <div className="h-full max-h-[60vh] flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <FlashCard
+                card={currentCard}
+                side="back"
+                onFlip={() => {}}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="mt-auto min-h-[5rem]">
+           {step === 'showAnswer' && (
+              <GradeButtons onGrade={grade} />
+           )}
+        </div>
       </div>
     </main>
   );

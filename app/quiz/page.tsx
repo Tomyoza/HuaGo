@@ -7,21 +7,32 @@ import SpeakButton from '@/components/SpeakButton';
 import { useQuizFlow } from '@/lib/hooks/useQuizFlow';
 
 export default function QuizPage() {
-  const { questions, currentQuestion, step, timeLeft, userInput, isCorrect, score, isComplete, startRecall, submitAnswer, nextQuestion, finish } = useQuizFlow();
+  const { 
+    questions, 
+    currentQuestion, 
+    step, 
+    timeLeft, 
+    isCorrect, 
+    score, 
+    isComplete, 
+    startRecall, 
+    submitAnswer, 
+    nextQuestion 
+  } = useQuizFlow();
 
   const [input, setInput] = useState('');
 
   if (isComplete) {
     return (
-      <main className="min-h-screen bg-gray-50">
+      <main className="min-h-screen bg-gray-50 flex flex-col">
         <PageHeader title="クイズ完了" showBack backHref="/" />
 
-        <div className="p-4 space-y-6">
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <h2 className="text-xl font-bold mb-4">クイズ完了！</h2>
-            <div className="text-lg">
-              <p>正答: {score.correct}</p>
-              <p>誤答: {score.wrong}</p>
+        <div className="flex-1 p-4 flex flex-col items-center justify-center space-y-6">
+          <div className="bg-white rounded-2xl shadow-lg p-8 text-center w-full max-w-sm">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">クイズ完了！</h2>
+            <div className="text-lg space-y-2 text-gray-600">
+              <p>正答: <span className="font-bold text-green-600">{score.correct}</span></p>
+              <p>誤答: <span className="font-bold text-red-500">{score.wrong}</span></p>
               <p>再出題: {score.retry}</p>
             </div>
           </div>
@@ -30,17 +41,33 @@ export default function QuizPage() {
     );
   }
 
+  // データ読み込み中の待機画面
+  if (!currentQuestion) {
+    return (
+      <main className="min-h-screen bg-gray-50">
+        <PageHeader title="1分クイズ" showBack backHref="/" />
+        <div className="p-4 flex justify-center items-center h-[60vh]">
+          <div className="animate-pulse text-gray-400">Loading cards...</div>
+        </div>
+      </main>
+    );
+  }
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-gray-50 flex flex-col">
       <PageHeader title="1分クイズ" showBack backHref="/" />
 
-      <div className="p-4 space-y-6">
+      <div className="flex-1 p-4 flex flex-col items-center justify-center space-y-6 max-w-md mx-auto w-full">
         {step === 'showQuestion' && (
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-2xl mb-4">{currentQuestion.japanese}</p>
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center w-full">
+            <span className="text-sm text-gray-400 font-bold uppercase tracking-wider mb-2 block">Meaning</span>
+            {/* 修正箇所1: japanese -> ja_meaning */}
+            <p className="text-3xl font-bold text-gray-800 mb-8 leading-relaxed">
+              {currentQuestion.ja_meaning}
+            </p>
             <button
               onClick={startRecall}
-              className="px-4 py-2 bg-blue-500 text-white rounded"
+              className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-95"
             >
               想起開始
             </button>
@@ -48,28 +75,40 @@ export default function QuizPage() {
         )}
 
         {step === 'recall' && (
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className="text-6xl font-bold mb-4">{timeLeft}</p>
-            <p className="text-gray-600">秒で思い出してください</p>
+          <div className="bg-white rounded-2xl shadow-xl p-12 text-center w-full">
+            <div className="text-8xl font-black text-blue-600 mb-4 tabular-nums">
+              {timeLeft}
+            </div>
+            <p className="text-gray-500 font-medium">秒で思い出してください</p>
           </div>
         )}
 
         {step === 'input' && (
-          <div className="bg-white rounded-lg shadow p-6">
-            <p className="text-xl mb-4">{currentQuestion.japanese}</p>
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-full">
+            {/* 修正箇所2: japanese -> ja_meaning */}
+            <p className="text-lg font-medium text-gray-600 mb-4 text-center">
+              {currentQuestion.ja_meaning}
+            </p>
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              className="w-full p-3 border rounded mb-4"
-              placeholder="答えを入力"
+              className="w-full p-4 border-2 border-gray-200 rounded-xl mb-6 text-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
+              placeholder="答えを入力 (繁体字)"
+              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  submitAnswer(input);
+                  setInput('');
+                }
+              }}
             />
             <button
               onClick={() => {
                 submitAnswer(input);
                 setInput('');
               }}
-              className="w-full px-4 py-2 bg-green-500 text-white rounded"
+              className="w-full py-4 bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 hover:bg-green-700 transition-all active:scale-95"
             >
               判定
             </button>
@@ -77,15 +116,24 @@ export default function QuizPage() {
         )}
 
         {step === 'result' && (
-          <div className="bg-white rounded-lg shadow p-6 text-center">
-            <p className={`text-4xl font-bold mb-4 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
+          <div className="bg-white rounded-2xl shadow-xl p-8 text-center w-full">
+            <div className={`text-5xl font-black mb-6 ${isCorrect ? 'text-green-500' : 'text-red-500'}`}>
               {isCorrect ? '正解！' : '不正解'}
-            </p>
-            <p className="text-2xl mb-4">{currentQuestion.answer}</p>
-            <SpeakButton text={currentQuestion.answer} />
+            </div>
+            
+            <div className="mb-8">
+              {/* 修正箇所3: answer -> hanzi_trad */}
+              <p className="text-4xl font-bold text-gray-900 mb-2">{currentQuestion.hanzi_trad}</p>
+              <div className="flex justify-center items-center gap-2">
+                <span className="text-xl text-blue-600 font-medium">{currentQuestion.pinyin}</span>
+                {/* 修正箇所4: answer -> hanzi_trad */}
+                <SpeakButton text={currentQuestion.hanzi_trad} />
+              </div>
+            </div>
+
             <button
               onClick={nextQuestion}
-              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
+              className="w-full py-4 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition-all active:scale-95"
             >
               次へ
             </button>
@@ -95,4 +143,3 @@ export default function QuizPage() {
     </main>
   );
 }
-

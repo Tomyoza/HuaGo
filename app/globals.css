@@ -1,6 +1,9 @@
 @import "tailwindcss";
 
-:root {
+/* Tailwind v4では、カスタムカラーやシャドウを @theme ブロックで定義します。
+  これにより bg-brand-600 や shadow-soft などのクラスが生成されます。
+*/
+@theme {
   --color-brand-50: #eff6ff;
   --color-brand-100: #dbeafe;
   --color-brand-200: #bfdbfe;
@@ -11,12 +14,16 @@
   --color-brand-700: #1d4ed8;
   --color-brand-800: #1e40af;
   --color-brand-900: #1e3a8a;
+
   --color-surface-50: #f8fafc;
   --color-surface-100: #f1f5f9;
-  --box-shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-  --box-shadow-glow: 0 0 15px rgba(59, 130, 246, 0.3);
+
+  --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.3);
 }
 
+/* Next.jsのデフォルト変数などはそのまま :root に残します 
+*/
 :root {
   --foreground-rgb: 15, 23, 42; /* Slate 900 */
   --background-start-rgb: 248, 250, 252; /* Slate 50 */
